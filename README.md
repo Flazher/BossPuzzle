@@ -1,5 +1,5 @@
 Q: The hell is this?
-===================
+==
 
 A: This is just curses powered Boss puzzle organized in client-server model.
 Yes, that's kind of weird.
