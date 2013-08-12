@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
-#include <math.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -35,13 +34,9 @@ int main(int argc, char** argv)
 	binaryname = argv[0];
 	if(argc == 3 && (port = atoi(argv[2])))
 		if(strlen(argv[1]) <= 15)
-		{
 			strncpy(host, argv[1], strlen(argv[1]));
-			host[strlen(argv[1]) + 1] = '\0';
-		} else {
+		else
 			usage(binaryname);
-		}
-		
 	else
 		usage(binaryname);
 	
