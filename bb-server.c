@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
-#include <math.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 #include "bb.h"
 #include "dialog.h"
 #include "output.h"
@@ -262,15 +260,4 @@ int isComplete()
 			if (field[i][j] != i*size+j+1 && (i != size-1 || j!=i))
 				done = 0;
 	return done;	
-}
-
-void fillLine(int Y, int colorpair)
-{
-	move(Y, 0);
-	clrtoeol();	
-	attron(COLOR_PAIR(colorpair));
-	attron(A_BOLD);
-	for (int i = 0; i < COLS; i++) printw(" ");
-	move(Y, 0);
-	refresh();
 }

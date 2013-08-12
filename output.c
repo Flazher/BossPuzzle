@@ -77,3 +77,14 @@ void usage(char *binname)
 	printf("Usage: %s <host> <port>\n", binname);
 	exit(1);
 }
+
+void fillLine(int Y, int colorpair)
+{
+	move(Y, 0);
+	clrtoeol();	
+	attron(COLOR_PAIR(colorpair));
+	attron(A_BOLD);
+	for (int i = 0; i < COLS; i++) printw(" ");
+	move(Y, 0);
+	refresh();
+}
