@@ -10,7 +10,6 @@
 #include "dialog.h"
 #include "output.h"
 
-void drawField();
 void fillMatrixWithData();
 
 char host[16];
@@ -32,11 +31,8 @@ int **field;
 int main(int argc, char** argv)
 {
 	binaryname = argv[0];
-	if(argc == 3 && (port = atoi(argv[2])))
-		if(strlen(argv[1]) <= 15)
-			strncpy(host, argv[1], strlen(argv[1]));
-		else
-			usage(binaryname);
+	if(argc == 3 && (port = atoi(argv[2])) && strlen(argv[1]) <= 15)
+		strncpy(host, argv[1], strlen(argv[1]));
 	else
 		usage(binaryname);
 	
@@ -81,21 +77,17 @@ int main(int argc, char** argv)
 		
 		if (response.status == BB_STATUS_IGNORED)
 			notify(BB_DIALOG_WARNING, BB_DIALOG_REQUEST_IGNORED);
+		else if((unsigned short int)(buffer[0]&0xf) != size)
+			fatalErrorCurses(BB_DIALOG_FIELD_SIZE_MISMATCH);
+		else if((unsigned short int)((buffer[bytesReceived-2]<<8)&0xff00|buffer[bytesReceived-1]) != BB_SIGNATURE)
+			notify(BB_DIALOG_WARNING, BB_DIALOG_SIGNATURE_MISMATCH);
 		else
-		{
-			if((unsigned short int)((buffer[bytesReceived-2]<<8)&0xff00|buffer[bytesReceived-1]) != BB_SIGNATURE)
-				notify(BB_DIALOG_WARNING, BB_DIALOG_SIGNATURE_MISMATCH);
-			else
-			{	
+		{	
 		switch (response.datatype)
 		{
 			case BB_DATATYPE_RAW_DATA:
 			{
 				printw(BB_DIALOG_FIELD_RECEIVED);
-				if((unsigned short int)(buffer[0]&0xf) != size)
-					fatalErrorCurses(BB_DIALOG_FIELD_SIZE_MISMATCH);
-				else
-				{
 					if (field == NULL)
 					{
 						field = (int**)malloc(sizeof(int*)*size);
@@ -105,7 +97,6 @@ int main(int argc, char** argv)
 					fillMatrixWithData();
 					getch();
 					drawField();
-				}
 				break;	
 			}
 			case BB_DATATYPE_EVENT:
@@ -120,18 +111,17 @@ int main(int argc, char** argv)
 			}
 		}
 			}
-		}
 	refresh();
 	key = getch();
 	if(key < 0x5B && key > 0x40) key += 0x14;
-		switch (key) {
-			case 0x77: request[0] = BB_COMMAND_MOVE | BB_MOVE_UP;  break;
-			case 0x61: request[0] = BB_COMMAND_MOVE | BB_MOVE_LEFT; break;
-			case 0x73: request[0] = BB_COMMAND_MOVE | BB_MOVE_DOWN; break;
-			case 0x64: request[0] = BB_COMMAND_MOVE | BB_MOVE_RIGHT; break;
-			case 0x71: endwin(); exit(0); break;
-			case 0x72: request[0] = BB_COMMAND_RAND; break;
-		}
+	switch (key) {
+		case 0x77: request[0] = BB_COMMAND_MOVE | BB_MOVE_UP; break;
+		case 0x61: request[0] = BB_COMMAND_MOVE | BB_MOVE_LEFT; break;
+		case 0x73: request[0] = BB_COMMAND_MOVE | BB_MOVE_DOWN; break;
+		case 0x64: request[0] = BB_COMMAND_MOVE | BB_MOVE_RIGHT; break;
+		case 0x71: endwin(); exit(0); break;
+		case 0x72: request[0] = BB_COMMAND_RAND; break;
+	}
 		send(sock, request, 1, 0);
 	}
 	
