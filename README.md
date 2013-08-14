@@ -12,7 +12,7 @@ A: Because I can, that's why. Don't ask stupid questions.
 Q: Anyway, it's just a puzzle.
 ======================================================
 
-Actually, you don't. But that's me.
+And that's me.
 Server generates a game field and handles client's request.
 The task of client side is just draw the field.
 
