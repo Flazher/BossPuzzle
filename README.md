@@ -9,7 +9,7 @@ Q: Client-server? For God's sake, why?
 
 A: Because I can, that's why. Don't ask stupid questions.
 
-Q: Anyway, it's just a puzzle. Why do I need client-server model?
+Q: Anyway, it's just a puzzle.
 ======================================================
 
 Actually, you don't. But that's me.
