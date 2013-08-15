@@ -3,7 +3,7 @@
 
 #define BB_DIALOG_CONNECTION_FAIL		"Can't connect to server"
 #define BB_DIALOG_CONNECTION_SUCCESSFUL	"Connection successful.\nPress any key to initialize curses interface\n"
-#define BB_DIALOG_SIZE_REQUEST			"Must be a number < 16 && > 2! "
+#define BB_DIALOG_SIZE_REQUEST			"Now we need to define size of matrix\nSize must be less than 16 and great than 1!"
 #define BB_DIALOG_WARNING				"Warning"
 #define BB_DIALOG_REQUEST_IGNORED		"Request ignored by server"
 #define BB_DIALOG_SIGNATURE_MISMATCH	"Signature mismatches"

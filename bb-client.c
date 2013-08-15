@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 	getch();
 	clear();
 	int key;
-	printw(BB_DIALOG_SIZE_REQUEST);
+	drawPopup("Request", BB_DIALOG_SIZE_REQUEST);
 
 	while(!scanw("%d", &size) || size > 15 || size < 1) {} 
 	request[0] = BB_COMMAND_INIT | size;

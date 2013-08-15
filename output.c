@@ -138,13 +138,46 @@ void drawIntroScreen()
 void drawPopup(char *title, char *msg)
 {
 	WINDOW *popup;
-	popup = subwin(stdscr, 5, strlen(msg)+15, (LINES-5)/2, (COLS-strlen(msg)-15)/2);
+	char *message = malloc(strlen(msg)+1);
+	strcpy(message,msg);
+	int newlineCount = 0;
+	int maxLength = 0;
+	int currentLength = -1;
+	char *currentSubstr = message;
+	for(int i = 0; i < strlen(message)+1; i++)
+	{
+		if(message[i]=='\n'||message[i]=='\0') {
+			maxLength = currentLength > maxLength ? currentLength : maxLength;
+			currentLength = 0;
+			newlineCount++;
+		}
+		else currentLength++;
+	}
+	popup = subwin(stdscr, 5 + newlineCount, maxLength+15, (LINES-5-newlineCount)/2, (COLS-maxLength-15)/2);
 	box(popup, 0, 0);
 	wmove(popup,0,3);
 	wprintw(popup,title);
-	wmove(popup,2,(strlen(msg)+15-strlen(msg))/2);
-	wprintw(popup,msg);
+	int c = 0;
+	int msgSize = strlen(message);
+	for(int i = 0; i < msgSize+1; i++)
+	{
+		if(message[i]=='\n') {
+			message[i] = '\0';
+			wmove(popup,2+c,(maxLength+15-strlen(currentSubstr))/2);
+			wprintw(popup,currentSubstr);
+			if(message[i+1]) currentSubstr+=i+1;
+			c++;
+		}
+		if(message[i]=='\0')
+		{
+			wmove(popup,2+c,(maxLength+15-strlen(currentSubstr))/2);
+			wprintw(popup,currentSubstr);
+		}
+	}
+	/*wmove(popup,2,(maxLength+15-maxLength)/2);
+	wprintw(popup,msg);*/
 	wrefresh(popup);
 	getch();
+	clear();
 	delwin(popup);
 }

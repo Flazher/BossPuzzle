@@ -2,6 +2,7 @@ CFLAGS=-g -lncurses -std=c99
 objects=bb-client.o bb-server.o output.o
 
 all:		$(objects)
+			make clean
 			make client
 			make server
 client:		bb-client.o output.o
