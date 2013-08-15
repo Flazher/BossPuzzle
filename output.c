@@ -135,12 +135,16 @@ void drawIntroScreen()
 	} */
 }
 
-void drawWinMsg()
+void drawPopup(char *title, char *msg)
 {
-	WINDOW *winWindow;
-	winWindow = subwin(stdscr, 5, 20, (LINES-5)/2, (COLS-20)/2);
-	box(winWindow, 0, 0);
-	wmove(winWindow,2,(20-strlen(BB_DIALOG_YOU_WON))/2);
-	wprintw(winWindow,BB_DIALOG_YOU_WON);
-	wrefresh(winWindow);
+	WINDOW *popup;
+	popup = subwin(stdscr, 5, strlen(msg)+15, (LINES-5)/2, (COLS-strlen(msg)-15)/2);
+	box(popup, 0, 0);
+	wmove(popup,0,3);
+	wprintw(popup,title);
+	wmove(popup,2,(strlen(msg)+15-strlen(msg))/2);
+	wprintw(popup,msg);
+	wrefresh(popup);
+	getch();
+	delwin(popup);
 }

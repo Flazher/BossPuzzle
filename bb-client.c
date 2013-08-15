@@ -107,7 +107,7 @@ int main(int argc, char** argv)
 				{
 					case BB_EVENT_MOVED: fillMatrixWithData(); drawField(); break;
 					case BB_EVENT_CANT_MOVE: drawField(); break;
-					case BB_EVENT_WIN: clear(); drawWinMsg(); getch(); endwin(); exit(0); break;
+					case BB_EVENT_WIN: clear(); drawPopup("Win", BB_DIALOG_YOU_WON); endwin(); exit(0); break;
 				}
 				break;
 			}
