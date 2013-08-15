@@ -123,16 +123,6 @@ void drawIntroScreen()
 	wmove(greet,greetWinHgh-2,greetWinWid-strlen(anykey)-3);
 	wprintw(greet,anykey);
 	wrefresh(greet);
-	// Deprecated	
-	/* wmove(greet, 10, 5);
-	wprintw(greet,BB_DIALOG_SIZE);
-	wmove(greet,10,strlen(BB_DIALOG_SIZE)+6);
-	while(!wscanw(greet,"%d",&sizeOfMatrix))
-	{
-		wmove(greet,12,(greetWinWid-strlen(BB_DIALOG_SIZE_REQUEST))/2);
-		wprintw(greet,BB_DIALOG_SIZE_REQUEST);
-		wmove(greet,10,strlen(BB_DIALOG_SIZE)+6);
-	} */
 }
 
 void drawPopup(char *title, char *msg)
@@ -174,8 +164,6 @@ void drawPopup(char *title, char *msg)
 			wprintw(popup,currentSubstr);
 		}
 	}
-	/*wmove(popup,2,(maxLength+15-maxLength)/2);
-	wprintw(popup,msg);*/
 	wrefresh(popup);
 	getch();
 	clear();
