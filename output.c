@@ -2,6 +2,8 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "dialog.h"
 
 void drawField()
 {
@@ -87,4 +89,58 @@ void fillLine(int Y, int colorpair)
 	for (int i = 0; i < COLS; i++) printw(" ");
 	move(Y, 0);
 	refresh();
+}
+
+void drawIntroScreen()
+{
+	char credits[] = "Written by flazhik <flazhik@gmail.com>";
+	char credits2[] = "No one actually cares";
+	char anykey[] = "Any key, plz";
+	int sizeOfMatrix;
+	int greetWinWid = 50;
+	int greetWinHgh = 20;
+	int logoStartX = (greetWinWid-9)/3;
+	WINDOW *greet;
+	greet = subwin(stdscr, greetWinHgh, greetWinWid, 3, (COLS-greetWinWid)/2);
+	box(greet, 0, 0);	
+	wmove(greet, 0, 3);
+	wprintw(greet, "Boss Puzzle client");
+	for(int y=3;y<8;y++)
+	{
+		for(int x=1+logoStartX;x<3+logoStartX;x++){wmove(greet,y,x);waddch(greet,ACS_BLOCK);}
+		for(int x=5+logoStartX;x<10+logoStartX;x++){wmove(greet,y,x);if(y%2||(x>4+logoStartX&&x<7+logoStartX&&y==4)||(x>7+logoStartX&&x<10+logoStartX&&y==6)) waddch(greet,ACS_BLOCK);}
+	}
+	wmove(greet, 3, logoStartX+11);
+	wprintw(greet,"Ultimate bicycle");
+	wmove(greet, 4, logoStartX+11);
+	wprintw(greet,"aka Boss Puzzle");
+	wmove(greet, 7, logoStartX+11);
+	wprintw(greet,"ROFL");
+	wmove(greet, greetWinHgh-5, (greetWinWid-strlen(credits))/2);
+	wprintw(greet,credits);
+	wmove(greet, greetWinHgh-4, (greetWinWid-strlen(credits2))/2);
+	wprintw(greet,credits2);
+	wmove(greet,greetWinHgh-2,greetWinWid-strlen(anykey)-3);
+	wprintw(greet,anykey);
+	wrefresh(greet);
+	// Deprecated	
+	/* wmove(greet, 10, 5);
+	wprintw(greet,BB_DIALOG_SIZE);
+	wmove(greet,10,strlen(BB_DIALOG_SIZE)+6);
+	while(!wscanw(greet,"%d",&sizeOfMatrix))
+	{
+		wmove(greet,12,(greetWinWid-strlen(BB_DIALOG_SIZE_REQUEST))/2);
+		wprintw(greet,BB_DIALOG_SIZE_REQUEST);
+		wmove(greet,10,strlen(BB_DIALOG_SIZE)+6);
+	} */
+}
+
+void drawWinMsg()
+{
+	WINDOW *winWindow;
+	winWindow = subwin(stdscr, 5, 20, (LINES-5)/2, (COLS-20)/2);
+	box(winWindow, 0, 0);
+	wmove(winWindow,2,(20-strlen(BB_DIALOG_YOU_WON))/2);
+	wprintw(winWindow,BB_DIALOG_YOU_WON);
+	wrefresh(winWindow);
 }

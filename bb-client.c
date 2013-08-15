@@ -49,17 +49,19 @@ int main(int argc, char** argv)
 	inet_pton(AF_INET, host, (void *)(&(server_addr.sin_addr.s_addr)));
 	if(connect(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0)
 		fatalError(BB_DIALOG_CONNECTION_FAIL);	
-	
 	printf(BB_DIALOG_CONNECTION_SUCCESSFUL);
 	getchar();
 
 	initscr();
 	start_color();
-	init_pair(1, COLOR_WHITE, COLOR_BLUE);
-	init_pair(3, COLOR_RED, COLOR_BLUE);
+	init_pair(1, COLOR_WHITE, COLOR_BLACK);
+	init_pair(3, COLOR_RED, COLOR_BLACK);
 	bkgd(COLOR_PAIR(1));
 	attron(COLOR_PAIR(1));
 
+	drawIntroScreen();
+	getch();
+	clear();
 	int key;
 	printw(BB_DIALOG_SIZE_REQUEST);
 
@@ -77,8 +79,6 @@ int main(int argc, char** argv)
 		
 		if (response.status == BB_STATUS_IGNORED)
 			notify(BB_DIALOG_WARNING, BB_DIALOG_REQUEST_IGNORED);
-		else if((unsigned short int)(buffer[0]&0xf) != size)
-			fatalErrorCurses(BB_DIALOG_FIELD_SIZE_MISMATCH);
 		else if((unsigned short int)((buffer[bytesReceived-2]<<8)&0xff00|buffer[bytesReceived-1]) != BB_SIGNATURE)
 			notify(BB_DIALOG_WARNING, BB_DIALOG_SIGNATURE_MISMATCH);
 		else
@@ -87,6 +87,8 @@ int main(int argc, char** argv)
 		{
 			case BB_DATATYPE_RAW_DATA:
 			{
+				if((unsigned short int)(buffer[0]&0xf) != size)
+					fatalErrorCurses(BB_DIALOG_FIELD_SIZE_MISMATCH);
 				printw(BB_DIALOG_FIELD_RECEIVED);
 					if (field == NULL)
 					{
@@ -105,7 +107,7 @@ int main(int argc, char** argv)
 				{
 					case BB_EVENT_MOVED: fillMatrixWithData(); drawField(); break;
 					case BB_EVENT_CANT_MOVE: drawField(); break;
-					case BB_EVENT_WIN: clear(); printw(BB_DIALOG_YOU_WON); getch(); exit(0); break;
+					case BB_EVENT_WIN: clear(); drawWinMsg(); getch(); endwin(); exit(0); break;
 				}
 				break;
 			}
