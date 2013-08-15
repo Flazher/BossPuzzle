@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 				switch (response.args)
 				{
 					case BB_EVENT_MOVED: fillMatrixWithData(); drawField(); break;
-					case BB_EVENT_CANT_MOVE: drawField(); break;
+					case BB_EVENT_CANT_MOVE: drawPopup(BB_DIALOG_WARNING, BB_DIALOG_CANT_MOVE); drawField(); break;
 					case BB_EVENT_WIN: clear(); drawPopup("Win", BB_DIALOG_YOU_WON); endwin(); exit(0); break;
 				}
 				break;
