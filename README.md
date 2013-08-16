@@ -1,4 +1,4 @@
-Q: The hell is this?
+Q: What the hell is this?
 ==
 
 A: This is just curses powered Boss puzzle organized in client-server model.
