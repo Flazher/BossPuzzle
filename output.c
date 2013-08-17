@@ -2,6 +2,8 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "dialog.h"
 
 void drawField()
 {
@@ -76,4 +78,94 @@ void usage(char *binname)
 {
 	printf("Usage: %s <host> <port>\n", binname);
 	exit(1);
+}
+
+void fillLine(int Y, int colorpair)
+{
+	move(Y, 0);
+	clrtoeol();	
+	attron(COLOR_PAIR(colorpair));
+	attron(A_BOLD);
+	for (int i = 0; i < COLS; i++) printw(" ");
+	move(Y, 0);
+	refresh();
+}
+
+void drawIntroScreen()
+{
+	char credits[] = "Written by flazhik <flazhik@gmail.com>";
+	char credits2[] = "No one actually cares";
+	char anykey[] = "Any key, plz";
+	int sizeOfMatrix;
+	int greetWinWid = 50;
+	int greetWinHgh = 20;
+	int logoStartX = (greetWinWid-9)/3;
+	WINDOW *greet;
+	greet = subwin(stdscr, greetWinHgh, greetWinWid, 3, (COLS-greetWinWid)/2);
+	box(greet, 0, 0);	
+	wmove(greet, 0, 3);
+	wprintw(greet, "Boss Puzzle client");
+	for(int y=3;y<8;y++)
+	{
+		for(int x=1+logoStartX;x<3+logoStartX;x++){wmove(greet,y,x);waddch(greet,ACS_BLOCK);}
+		for(int x=5+logoStartX;x<10+logoStartX;x++){wmove(greet,y,x);if(y%2||(x>4+logoStartX&&x<7+logoStartX&&y==4)||(x>7+logoStartX&&x<10+logoStartX&&y==6)) waddch(greet,ACS_BLOCK);}
+	}
+	wmove(greet, 3, logoStartX+11);
+	wprintw(greet,"Ultimate bicycle");
+	wmove(greet, 4, logoStartX+11);
+	wprintw(greet,"aka Boss Puzzle");
+	wmove(greet, 7, logoStartX+11);
+	wprintw(greet,"ROFL");
+	wmove(greet, greetWinHgh-5, (greetWinWid-strlen(credits))/2);
+	wprintw(greet,credits);
+	wmove(greet, greetWinHgh-4, (greetWinWid-strlen(credits2))/2);
+	wprintw(greet,credits2);
+	wmove(greet,greetWinHgh-2,greetWinWid-strlen(anykey)-3);
+	wprintw(greet,anykey);
+	wrefresh(greet);
+}
+
+void drawPopup(char *title, char *msg)
+{
+	WINDOW *popup;
+	char *message = malloc(strlen(msg)+1);
+	strcpy(message,msg);
+	int newlineCount = 0;
+	int maxLength = 0;
+	int currentLength = -1;
+	char *currentSubstr = message;
+	for(int i = 0; i < strlen(message)+1; i++)
+	{
+		if(message[i]=='\n'||message[i]=='\0') {
+			maxLength = currentLength > maxLength ? currentLength : maxLength;
+			currentLength = 0;
+			newlineCount++;
+		}
+		else currentLength++;
+	}
+	popup = subwin(stdscr, 5 + newlineCount, maxLength+15, (LINES-5-newlineCount)/2, (COLS-maxLength-15)/2);
+	box(popup, 0, 0);
+	wmove(popup,0,3);
+	wprintw(popup,title);
+	int c = 0;
+	int msgSize = strlen(message);
+	for(int i = 0; i < msgSize+1; i++)
+	{
+		if(message[i]=='\n') {
+			message[i] = '\0';
+			wmove(popup,2+c,(maxLength+15-strlen(currentSubstr))/2);
+			wprintw(popup,currentSubstr);
+			if(message[i+1]) currentSubstr+=i+1;
+			c++;
+		}
+		if(message[i]=='\0')
+		{
+			wmove(popup,2+c,(maxLength+15-strlen(currentSubstr))/2);
+			wprintw(popup,currentSubstr);
+		}
+	}
+	wrefresh(popup);
+	getch();
+	clear();
+	delwin(popup);
 }
