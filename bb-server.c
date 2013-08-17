@@ -124,30 +124,30 @@ int main(int argc, char** argv)
 					}
 					case BB_COMMAND_MOVE:
 					{
-						response[0] = (BB_STATUS_OK | BB_DATATYPE_EVENT | BB_EVENT_MOVED);
+						response[0] = (BB_STATUS_OK | BB_DATATYPE_EVENT);
 						
 
-						if(cellMoved(request.argument))
+						if(!cellMoved(request.argument))
+							response[0] |= BB_EVENT_CANT_MOVE;
+						else
 						{
-							response[0] &= BB_EVENT_MOVED|0xf0;
+							response[0] |= BB_EVENT_MOVED;
 							steps++;
+							fillLine(LINES - 1, 2);	
+							attroff(A_BOLD);
+							if (isComplete())
+							{
+								printw("Client won with %i steps in %ix%i field.", steps, size, size);	
+								// FIX IT!!!
+								response[0] = 0x23;
+							}
+							else
+							{
+								prepareRawData();
+								printw(BB_DIALOG_STEPS, steps);
+							}
+							attron(COLOR_PAIR(1));
 						}
-						else
-							response[0] &= BB_EVENT_CANT_MOVE|0xf0;
-					
-						fillLine(LINES - 1, 2);	
-						attroff(A_BOLD);
-						if (isComplete())
-						{
-							printw("Client won with %i steps in %ix%i field.", steps, size, size);	
-							response[0] = 0x23;
-						}
-						else
-						{
-							prepareRawData();
-							printw(BB_DIALOG_STEPS, steps);
-						}
-						attron(COLOR_PAIR(1));
 						refresh();
 						break;
 					}
