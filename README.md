@@ -1,7 +1,7 @@
 Q: What the hell is this?
 ==
 
-A: This is just curses powered Boss puzzle organized in client-server model.
+A: This is just curses powered Boss puzzle organized in a client-server model.
 Yes, that's kind of weird.
 
 Q: Client-server? For God's sake, why?
@@ -13,8 +13,8 @@ Q: Anyway, it's just a puzzle.
 ======================================================
 
 And that's me.
-Server generates a game field and handles client's request.
-The task of client side is just draw the field.
+Server generates a game field and handles client's requests.
+The purpose of a client side is just to draw the field.
 
 Q: You're such an idiot.
 ======================
